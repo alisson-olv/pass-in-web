@@ -1,4 +1,5 @@
 import { Search, MoreHorizontal, ChevronsLeft, ChevronLeft, ChevronsRight, ChevronRight } from 'lucide-react';
+import { IconButton } from './icon-button';
 
 export function AttendeeList() {
   return (
@@ -8,7 +9,7 @@ export function AttendeeList() {
         <div className="px-3 py-1.5 border border-white/10 rounded-lg text-sm w-72 flex items-center gap-3">
           <Search width={16} className='text-emerald-300' />
           <input
-            className="bg-transparent flex-1 outline-none border-0 text-sm focus:outline-none"
+            className="bg-transparent flex-1 border-0 text-sm focus:ring-0 focus:border-0"
             placeholder="Buscar participante..."
           />
         </div>
@@ -21,7 +22,7 @@ export function AttendeeList() {
               <th
                 style={{ width: 48 }}
                 className='py-3 px-4 text-sm font-semibold text-left'>
-                <input className='bg-black/20 rounded border border-white/18 text-orange-400 outline-none' type="checkbox" />
+                <input className='bg-black/20 rounded border border-white/18 text-orange-400 outline-none focus:ring-0' type="checkbox" />
               </th>
               <th className='py-3 px-4 text-sm font-semibold text-left'>Código</th>
               <th className='py-3 px-4 text-sm font-semibold text-left'>Participante</th>
@@ -35,7 +36,7 @@ export function AttendeeList() {
               Array.from({ length: 5 }).map(() => (
                 <tr className='border-b border-white/10 hover:bg-white/5'>
                   <td className='py-3 px-4 text-sm text-zinc-300'>
-                    <input className='bg-black/20 rounded border border-white/18 text-orange-400 outline-none' type="checkbox" />
+                    <input className='bg-black/20 rounded border border-white/18 text-orange-400 outline-none focus:ring-0' type="checkbox" />
                   </td>
                   <td className='py-3 px-4 text-sm text-zinc-300'>12345</td>
                   <td className='py-3 px-4 text-sm text-zinc-300'>
@@ -47,9 +48,9 @@ export function AttendeeList() {
                   <td className='py-3 px-4 text-sm text-zinc-300'>7 dias atrás</td>
                   <td className='py-3 px-4 text-sm text-zinc-300'>3 dias atrás</td>
                   <td className='py-3 px-4 text-sm text-zinc-300'>
-                    <button className='bg-black/20 border border-white/20 rounded-md p-1.5'>
+                    <IconButton transparent={true}>
                       <MoreHorizontal size={16} />
-                    </button>
+                    </IconButton>
                   </td>
                 </tr>
               ))
@@ -66,18 +67,18 @@ export function AttendeeList() {
                   <span>Página 1 de 10</span>
 
                   <div className='flex gap-1.5'>
-                    <button className='bg-white/10 border border-white/10 rounded-md p-1.5'>
+                    <IconButton>
                       <ChevronsLeft size={16} />
-                    </button>
-                    <button className='bg-white/10 border border-white/10 rounded-md p-1.5'>
+                    </IconButton>
+                    <IconButton>
                       <ChevronLeft size={16} />
-                    </button>
-                    <button className='bg-white/10 border border-white/10 rounded-md p-1.5'>
+                    </IconButton>
+                    <IconButton>
                       <ChevronRight size={16} />
-                    </button>
-                    <button className='bg-white/10 border border-white/10 rounded-md p-1.5'>
+                    </IconButton>
+                    <IconButton>
                       <ChevronsRight size={16} />
-                    </button>
+                    </IconButton>
                   </div>
                 </div>
               </td>
