@@ -6,10 +6,21 @@ import { Table } from './tables/table';
 import { TableHeader } from './tables/table-header';
 import { TableCell } from './tables/table-cell';
 import { TableRow } from './tables/table-row';
-
-import { attendees } from './data/attendees';
+import { attendees } from '../data/attendees';
+import { useEffect, useState } from 'react';
 
 export function AttendeeList() {
+  const [data, setData] = useState<Array | null>(null);
+
+  useEffect(() => {
+    async function getData() {
+      const response = await fetch('http://localhost:3000/attendees?_page=1&_limit=10&_sort=name&_order=asc&q=ne');
+      const json = await response.json();
+      setData(json);
+    }
+
+    getData();
+  }, [])
 
   return (
     <div className='flex flex-col gap-4'>
@@ -39,7 +50,7 @@ export function AttendeeList() {
         </thead>
         <tbody>
           {
-            attendees.map((attendees) => (
+            data && data.map((attendees) => (
               <TableRow key={attendees.id}>
                 <TableCell>
                   <input className='bg-black/20 rounded border border-white/18 text-orange-400 outline-none focus:ring-0' type="checkbox" />
