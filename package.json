@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "server": "json-server --watch src/data/db.json",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "date-fns": "^3.6.0",
-    "json-server": "^1.0.0-alpha.23",
     "lucide-react": "^0.364.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

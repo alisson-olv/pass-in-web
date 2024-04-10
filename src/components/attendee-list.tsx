@@ -6,31 +6,72 @@ import { Table } from './tables/table';
 import { TableHeader } from './tables/table-header';
 import { TableCell } from './tables/table-cell';
 import { TableRow } from './tables/table-row';
-import { attendees } from '../data/attendees';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
+import { dataProps } from '../interfaces/data';
 
 export function AttendeeList() {
-  const [data, setData] = useState<Array | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
+  const [countPages, setCountPages] = useState(1);
+  const totalPages = Math.ceil(totalItems / 10);
+  const [user, setUser] = useState('');
+  const [data, setData] = useState<dataProps[] | null>(null);
+
 
   useEffect(() => {
     async function getData() {
-      const response = await fetch('http://localhost:3000/attendees?_page=1&_limit=10&_sort=name&_order=asc&q=ne');
+      const response = await fetch(`http://localhost:3000/attendees?_page=${page}_limit=10&q=${user}`);
       const json = await response.json();
       setData(json);
+
+      const countedItems = await fetch(`http://localhost:3000/attendees?q=${user}`)
+      const totalCountedItems = await countedItems.json();
+      setTotalItems(totalCountedItems.length);
     }
 
     getData();
-  }, [])
+
+  }, [page, user]);
+
+  function goToNextPage() {
+    if (page < totalPages) {
+      setPage(page + 1);
+      setCountPages(countPages + 1);
+    }
+  }
+
+  function goToPrevPage() {
+    if (page > 1) {
+      setPage(page - 1);
+      setCountPages(countPages - 1);
+    }
+  }
+
+  function goToFirstPage() {
+    setPage(1);
+    setCountPages(1);
+  }
+
+  function goToLastPage() {
+    setPage(totalPages);
+    setCountPages(totalPages);
+  }
+
+  function searchUsers(event: ChangeEvent<HTMLInputElement>) {
+    setUser(event.target.value);
+  }
 
   return (
     <div className='flex flex-col gap-4'>
-      <div className="flex gap-3 items-center">
+      <div className="flex gap-3 items-center flex-wrap">
         <h1 className="text-2xl font-bold">Participantes</h1>
         <div className="px-3 py-1.5 border border-white/10 rounded-lg text-sm w-72 flex items-center gap-3">
           <Search width={16} className='text-emerald-300' />
           <input
+            value={user}
             className="bg-transparent flex-1 border-0 text-sm focus:ring-0 focus:border-0"
             placeholder="Buscar participante..."
+            onChange={searchUsers}
           />
         </div>
       </div>
@@ -75,23 +116,23 @@ export function AttendeeList() {
         </tbody>
         <tfoot>
           <tr>
-            <TableCell colSpan={3}>Mostrando 1 de 200 itens</TableCell>
+            <TableCell colSpan={3}>Total de {totalItems} usuários</TableCell>
             <TableCell className='text-right' colSpan={3}
             >
               <div className='inline-flex gap-8 items-center'>
-                <span>Página 1 de 10</span>
+                <span>Página {countPages} de {totalPages}</span>
 
                 <div className='flex gap-1.5'>
-                  <IconButton>
+                  <IconButton onClick={goToFirstPage} disabled={countPages == 1 ? true : false}>
                     <ChevronsLeft size={16} />
                   </IconButton>
-                  <IconButton>
+                  <IconButton onClick={goToPrevPage} disabled={countPages == 1 ? true : false}>
                     <ChevronLeft size={16} />
                   </IconButton>
-                  <IconButton>
+                  <IconButton onClick={goToNextPage} disabled={countPages == totalPages ? true : false}>
                     <ChevronRight size={16} />
                   </IconButton>
-                  <IconButton>
+                  <IconButton onClick={goToLastPage} disabled={countPages == totalPages ? true : false}>
                     <ChevronsRight size={16} />
                   </IconButton>
                 </div>
