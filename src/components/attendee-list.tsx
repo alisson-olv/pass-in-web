@@ -15,7 +15,7 @@ export function AttendeeList() {
   const [countPages, setCountPages] = useState(1);
   const totalPages = Math.ceil(totalItems / 10);
   const [user, setUser] = useState('');
-  const [data, setData] = useState<dataProps[] | null>(null);
+  const [data, setData] = useState<dataProps[] | null>([]);
 
   useEffect(() => {
     async function getData() {
@@ -30,13 +30,15 @@ export function AttendeeList() {
 
     getData();
 
-  }, [page, user, setPage]);
+  }, [page, user]);
 
   async function handleDeleteUser(userId: number) {
     try {
       await fetch(`http://localhost:3000/attendees/${userId}`, {
         method: 'DELETE',
       })
+
+      setData((prevData) => prevData?.filter((attendee) => attendee.id !== userId) ?? []);
 
     } catch (error) {
       console.error('Erro ao excluir usuário', error);
