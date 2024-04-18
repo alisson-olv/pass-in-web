@@ -17,10 +17,9 @@ export function AttendeeList() {
   const [user, setUser] = useState('');
   const [data, setData] = useState<dataProps[] | null>(null);
 
-
   useEffect(() => {
     async function getData() {
-      const response = await fetch(`http://localhost:3000/attendees?_page=${page}_limit=10&q=${user}`);
+      const response = await fetch(`http://localhost:3000/attendees?_page=${page}&_limit=10&q=${user}`);
       const json = await response.json();
       setData(json);
 
@@ -31,7 +30,18 @@ export function AttendeeList() {
 
     getData();
 
-  }, [page, user]);
+  }, [page, user, setPage]);
+
+  async function handleDeleteUser(userId: number) {
+    try {
+      await fetch(`http://localhost:3000/attendees/${userId}`, {
+        method: 'DELETE',
+      })
+
+    } catch (error) {
+      console.error('Erro ao excluir usuário', error);
+    }
+  }
 
   function goToNextPage() {
     if (page < totalPages) {
@@ -106,7 +116,7 @@ export function AttendeeList() {
                 <TableCell>{formatRelative(attendees.createdAt, new Date(), { locale: ptBR, })}</TableCell>
                 <TableCell>{formatRelative(attendees.checkedInAt, new Date(), { locale: ptBR, })}</TableCell>
                 <TableCell>
-                  <IconButton transparent={true}>
+                  <IconButton onClick={() => handleDeleteUser(attendees.id)} transparent={true}>
                     <MoreHorizontal size={16} />
                   </IconButton>
                 </TableCell>
